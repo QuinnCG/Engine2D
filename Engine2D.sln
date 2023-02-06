@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox", "Sandbox\Sandbox.csproj", "{5B368DB6-3172-4FCD-989B-CF11EC6F219D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine2D", "Engine2D\Engine2D.csproj", "{615BD308-BC94-435A-B6B2-DA17A1343FDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B368DB6-3172-4FCD-989B-CF11EC6F219D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B368DB6-3172-4FCD-989B-CF11EC6F219D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B368DB6-3172-4FCD-989B-CF11EC6F219D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B368DB6-3172-4FCD-989B-CF11EC6F219D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{615BD308-BC94-435A-B6B2-DA17A1343FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{615BD308-BC94-435A-B6B2-DA17A1343FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{615BD308-BC94-435A-B6B2-DA17A1343FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{615BD308-BC94-435A-B6B2-DA17A1343FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43FEE3A3-0BD7-4628-A78D-964EFAEEB48A}
+	EndGlobalSection
+EndGlobal

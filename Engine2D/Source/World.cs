@@ -2,52 +2,12 @@
 
 public class World
 {
-	internal static World? InjectionWorld { get; set; }
-
-	internal static HashSet<World> LoadedWorlds = new();
+	internal static HashSet<World> ActiveWorlds = new();
 
 	private readonly HashSet<Entity> _entities = new();
 	private readonly bool _hasBegun = false;
 
-	public World()
-	{
-		InjectionWorld ??= this;
-	}
-
-	public static void SetInjectionWorld(World world)
-	{
-		InjectionWorld = world;
-	}
-
-	public void MoveEntity(Entity entity, World newWorld)
-	{
-		RemoveEntity(entity);
-		newWorld.AddEntity(entity);
-	}
-
-	public void Load()
-	{
-		LoadedWorlds.Add(this);
-
-		foreach (Entity entity in _entities)
-		{
-			entity.Begin();
-		}
-	}
-
-	public void Unload()
-	{
-		LoadedWorlds.Remove(this);
-
-		foreach (Entity entity in _entities)
-		{
-			entity.End();
-		}
-
-		_entities.Clear();
-	}
-
-	internal void AddEntity(params Entity[] entities)
+	public void AddEntity(params Entity[] entities)
 	{
 		if (_hasBegun)
 		{
@@ -66,7 +26,7 @@ public class World
 		}
 	}
 
-	internal void RemoveEntity(params Entity[] entities)
+	public void RemoveEntity(params Entity[] entities)
 	{
 		if (_hasBegun)
 		{
@@ -83,6 +43,43 @@ public class World
 				_entities.Remove(entity);
 			}
 		}
+	}
+
+	public void MoveEntity(Entity entity, World newWorld)
+	{
+		RemoveEntity(entity);
+		newWorld.AddEntity(entity);
+	}
+
+	public void Activate(World world)
+	{
+		ActiveWorlds.Add(world);
+	}
+
+	public void Deactivate(World world)
+	{
+		ActiveWorlds.Remove(world);
+	}
+
+	public void Load()
+	{
+		ActiveWorlds.Add(this);
+		foreach (Entity entity in _entities)
+		{
+			entity.Begin();
+		}
+	}
+
+	public void Unload()
+	{
+		ActiveWorlds.Remove(this);
+
+		foreach (Entity entity in _entities)
+		{
+			entity.End();
+		}
+
+		_entities.Clear();
 	}
 
 	internal void Update(float delta)

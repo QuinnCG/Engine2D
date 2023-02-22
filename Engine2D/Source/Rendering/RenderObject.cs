@@ -1,15 +1,11 @@
 ﻿namespace Engine2D.Rendering;
 
-internal struct RenderObject
+internal class RenderObject
 {
 	public Sprite? Sprite;
-	public RenderTransform Transform;
-	public Color Color;
+	public Color Color = Color.White;
 
-	public RenderObject()
-	{
-		Sprite = null;
-		Transform = new();
-		Color = Color.White;
-	}
+	public RenderTransform Transform;
+	public Vertex[] Vertices;
+	public uint[] Indices;
 }

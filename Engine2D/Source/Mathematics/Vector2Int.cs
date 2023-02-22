@@ -29,5 +29,9 @@ public struct Vector2Int
 	public static Vector2Int operator /(Vector2Int a, Vector2Int b) => new(a.X / b.X, a.Y / b.Y);
 
 	public static Vector2Int operator *(Vector2Int v, int f) => new(v.X * f, v.Y * f);
+	public static Vector2Int operator *(int f, Vector2Int v) => new(v.X * f, v.Y * f);
 	public static Vector2Int operator /(Vector2Int v, int f) => new(v.X / f, v.Y / f);
+	public static Vector2Int operator /(int f, Vector2Int v) => new(v.X / f, v.Y / f);
+
+	public override string ToString() => $"<{X}, {Y}>";
 }

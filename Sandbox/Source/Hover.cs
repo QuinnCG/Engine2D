@@ -1,8 +1,9 @@
 ﻿using Engine2D;
+using Engine2D.Math;
 
 namespace Sandbox;
 
-public class Hover : Component
+class Hover : Component
 {
 	private Transform _transform;
 
@@ -13,6 +14,6 @@ public class Hover : Component
 
 	protected override void OnUpdate(float delta)
 	{
-		_transform.Position.Y = MathF.Sin(Time.Current);
+		_transform.Position = new Vector2(_transform.Position.X, MathF.Sin(Time.Current));
 	}
 }

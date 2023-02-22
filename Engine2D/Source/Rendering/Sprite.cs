@@ -6,21 +6,35 @@ public class Sprite
 {
 	public Texture Texture { get; }
 	public int PixelsPerUnit { get; }
-	public Vector2Int Size { get; }
-	public int Index;
+	public Vector2 Size { get; }
+	public Vector2Int Offset { get; }
 
+	public Sprite(Texture texture)
+	{
+		Texture = texture;
+		PixelsPerUnit = texture.Height;
+		Size = Vector2.One;
+		Offset = Vector2Int.Zero;
+	}
 	public Sprite(Texture texture, int pixelsPerUnit)
 	{
 		Texture = texture;
 		PixelsPerUnit = pixelsPerUnit;
-		Size = Vector2Int.One;
-		Index = 0;
+		Size = Vector2.One;
+		Offset = Vector2Int.Zero;
 	}
-	public Sprite(Texture texture, int pixelsPerUnit, Vector2Int size, int index = 0)
+	public Sprite(Texture texture, int pixelsPerUnit, Vector2 size)
 	{
 		Texture = texture;
 		PixelsPerUnit = pixelsPerUnit;
 		Size = size;
-		Index = index;
+		Offset = Vector2Int.Zero;
+	}
+	public Sprite(Texture texture, int pixelsPerUnit, Vector2 size, Vector2Int offset)
+	{
+		Texture = texture;
+		PixelsPerUnit = pixelsPerUnit;
+		Size = size;
+		Offset = offset;
 	}
 }

@@ -4,14 +4,26 @@ namespace Engine2D;
 
 public class Entity
 {
+	public event Action<Entity?> OnParentChange;
+
 	public bool ReceiveUpdates { get; private set; } = true;
 
 	private readonly Dictionary<Type, Component> _components = new();
 
-	public Entity()
+	public Entity? Parent
 	{
-		World.InjectionWorld?.AddEntity(this);
+		get => _parent;
+		set
+		{
+			if (Parent == value) return;
+			_parent?.RemoveChild(this);
+			_parent = value;
+			OnParentChange?.Invoke(value);
+		}
 	}
+
+	private Entity? _parent;
+	private readonly List<Entity> _children = new();
 
 	public bool HasComponent<T>() where T : Component
 	{
@@ -25,8 +37,6 @@ public class Entity
 
 	public void AddComponent(Component component)
 	{
-		Debug.Assert(HasRequiredComponents(component));
-
 		_components.Add(component.GetType(), component);
 		component.SetEntity(this);
 	}
@@ -34,8 +44,6 @@ public class Entity
 	{
 		foreach (var component in components)
 		{
-			Debug.Assert(HasRequiredComponents(component));
-
 			_components.Add(component.GetType(), component);
 			component.SetEntity(this);
 		}
@@ -43,7 +51,6 @@ public class Entity
 	public T AddComponent<T>() where T : Component, new()
 	{
 		var component = new T();
-		Debug.Assert(HasRequiredComponents(component));
 
 		_components.Add(typeof(T), component);
 		component.SetEntity(this);
@@ -67,10 +74,23 @@ public class Entity
 		_components.Remove(typeof(T));
 	}
 
+	public void AddChild(Entity entity)
+	{
+		_children.Add(entity);
+		entity.Parent = this;
+	}
+
+	public void RemoveChild(Entity entity)
+	{
+		_children.Remove(entity);
+		entity.Parent = null;
+	}
+
 	internal void Begin()
 	{
 		foreach (var component in _components.Values)
 		{
+			Debug.Assert(HasRequiredComponents(component));
 			component.Begin();
 		}
 
@@ -109,11 +129,19 @@ public class Entity
 	private bool HasRequiredComponents(Component component)
 	{
 		var attributes = component.GetType().GetCustomAttributes(true);
-
 		foreach (var attribute in attributes)
 		{
-			var type = attribute.GetType().GenericTypeArguments[0];
-			if (!_components.ContainsKey(type)) return false;
+			if (attribute.GetType() != typeof(RequireComponentAttribute<>))
+			{
+				continue;
+			}
+
+			var args = attribute.GetType().GenericTypeArguments;
+			if (args.Length > 0)
+			{
+				var type = args[0];
+				if (!_components.ContainsKey(type)) return false;
+			}
 		}
 
 		return true;

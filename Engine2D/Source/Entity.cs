@@ -110,6 +110,19 @@ public class Entity
 		}
 	}
 
+	internal void Render(float delta)
+	{
+		if (ReceiveUpdates)
+		{
+			OnRender(delta);
+		}
+
+		foreach (var component in _components.Values)
+		{
+			component.Render(delta);
+		}
+	}
+
 	internal void End()
 	{
 		OnEnd();
@@ -123,6 +136,7 @@ public class Entity
 	protected virtual void OnBegin() { }
 
 	protected virtual void OnUpdate(float delta) => ReceiveUpdates = false;
+	protected virtual void OnRender(float delta) { }
 
 	protected virtual void OnEnd() { }
 

@@ -9,12 +9,14 @@ class Program
 	private static void Main()
 	{
 		Application.OnLoad += OnLoad;
-		Application.OnUpdate += _ =>
+		Application.OnUpdate += delta =>
 		{
 			if (Input.IsKeyDown(Key.Escape))
 			{
 				Application.Window.Close();
 			}
+
+			Console.WriteLine(1f / delta);
 		};
 		Application.Start("Sandbox");
 	}
@@ -25,16 +27,11 @@ class Program
 
 		var entity = new Entity();
 		entity.AddComponent<Transform>();
-		entity.AddComponent<SpriteRenderer>();
-		world.AddEntity(entity);
-
-		var entity2 = new Entity();
-		entity2.AddComponent<Transform>();
 
 		var texture = new Texture(Resource.Load<TextureResource>("Campfire.png"), true);
 		var sprite = new Sprite(texture);
-		entity2.AddComponent(new SpriteRenderer(sprite));
-		world.AddEntity(entity2);
+		entity.AddComponent(new SpriteRenderer(sprite));
+		world.AddEntity(entity);
 
 		var camera = new Entity();
 		camera.AddComponent<Transform>();

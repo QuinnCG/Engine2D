@@ -57,6 +57,10 @@ internal sealed class GLShader : IDisposable
 	{
 		_gl.Uniform4(GetUniformLocation(name), x, y, z, w);
 	}
+	public void SetUniform(string name, Color color)
+	{
+		_gl.Uniform4(GetUniformLocation(name), color.R, color.G, color.B, color.A);
+	}
 	public unsafe void SetUniform(string name, Matrix4X4<float> matrix)
 	{
 		_gl.UniformMatrix4(_gl.GetUniformLocation(Handle, name), 1, false, (float*)&matrix);

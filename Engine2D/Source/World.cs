@@ -2,46 +2,45 @@
 
 public class World
 {
+	public static World DefaultWorld
+	{
+		get
+		{
+			if (_defaultWorld == null)
+				throw new Exception("Default world is set to null, but something is trying to access it.");
+			return _defaultWorld;
+		}
+		set => _defaultWorld = value;
+	}
+
 	internal static HashSet<World> ActiveWorlds = new();
 
+	private static World? _defaultWorld;
+
 	private readonly HashSet<Entity> _entities = new();
-	private readonly bool _hasBegun = false;
+	private readonly HashSet<Entity> _entitiesToAdd = new();
+	private readonly HashSet<Entity> _entitiesToRemove = new();
+
+	private bool _hasBegun = false;
+
+	public World()
+	{
+		_defaultWorld ??= this;
+	}
 
 	public void AddEntity(params Entity[] entities)
 	{
-		if (_hasBegun)
+		foreach (var entity in entities)
 		{
-			foreach (Entity entity in entities)
-			{
-				_entities.Add(entity);
-				entity.Begin();
-			}
-		}
-		else
-		{
-			foreach (Entity entity in entities)
-			{
-				_entities.Add(entity);
-			}
+			_entitiesToAdd.Add(entity);
 		}
 	}
 
 	public void RemoveEntity(params Entity[] entities)
 	{
-		if (_hasBegun)
+		foreach (var entity in entities)
 		{
-			foreach (Entity entity in entities)
-			{
-				entity.End();
-				_entities.Remove(entity);
-			}
-		}
-		else
-		{
-			foreach (Entity entity in entities)
-			{
-				_entities.Remove(entity);
-			}
+			_entitiesToRemove.Add(entity);
 		}
 	}
 
@@ -51,19 +50,11 @@ public class World
 		newWorld.AddEntity(entity);
 	}
 
-	public void Activate(World world)
-	{
-		ActiveWorlds.Add(world);
-	}
-
-	public void Deactivate(World world)
-	{
-		ActiveWorlds.Remove(world);
-	}
-
 	public void Load()
 	{
-		ActiveWorlds.Add(this);
+		Activate();
+		_hasBegun = true;
+
 		foreach (Entity entity in _entities)
 		{
 			entity.Begin();
@@ -72,7 +63,8 @@ public class World
 
 	public void Unload()
 	{
-		ActiveWorlds.Remove(this);
+		Deactivate();
+		_hasBegun = false;
 
 		foreach (Entity entity in _entities)
 		{
@@ -82,11 +74,49 @@ public class World
 		_entities.Clear();
 	}
 
+	public void Activate()
+	{
+		ActiveWorlds.Add(this);
+	}
+
+	public void Deactivate()
+	{
+		ActiveWorlds.Remove(this);
+	}
+
 	internal void Update(float delta)
 	{
+		foreach (var entity in _entitiesToAdd)
+		{
+			_entities.Add(entity);
+			if (_hasBegun)
+			{
+				entity.Begin();
+			}
+		}
+		_entitiesToAdd.Clear();
+
+		foreach (var entity in _entitiesToRemove)
+		{
+			if (_hasBegun)
+			{
+				entity.End();
+			}
+			_entities.Remove(entity);
+		}
+		_entitiesToRemove.Clear();
+
 		foreach (var entity in _entities)
 		{
 			entity.Update(delta);
+		}
+	}
+
+	internal void Render(float delta)
+	{
+		foreach (var entity in _entities)
+		{
+			entity.Render(delta);
 		}
 	}
 }

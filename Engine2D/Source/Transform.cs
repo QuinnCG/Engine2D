@@ -57,8 +57,7 @@ public sealed class Transform : Component
 
 	private Transform? _parentTransform;
 
-	public Transform()
-	{ }
+	public Transform() { }
 	public Transform(bool worldSpace = false)
 	{
 		WorldSpace = worldSpace;

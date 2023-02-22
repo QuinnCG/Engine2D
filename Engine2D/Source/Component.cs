@@ -21,6 +21,14 @@ public abstract class Component
 		}
 	}
 
+	internal void Render(float delta)
+	{
+		if (ReceiveUpdates)
+		{
+			OnRender(delta);
+		}
+	}
+
 	internal void End()
 	{
 		OnEnd();
@@ -40,6 +48,7 @@ public abstract class Component
 	protected virtual void OnBegin() { }
 
 	protected virtual void OnUpdate(float delta) => ReceiveUpdates = false;
+	protected virtual void OnRender(float delta) { }
 
 	protected virtual void OnEnd() { }
 

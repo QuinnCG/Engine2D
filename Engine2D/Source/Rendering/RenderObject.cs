@@ -6,6 +6,4 @@ internal class RenderObject
 	public Color Color = Color.White;
 
 	public RenderTransform Transform;
-	public Vertex[] Vertices;
-	public uint[] Indices;
 }

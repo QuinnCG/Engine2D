@@ -44,9 +44,6 @@ internal sealed class GLVertexArray : IDisposable
 
 		_gl.EnableVertexAttribArray(1);
 		_gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, stride, (void*)(sizeof(float) * 2));
-
-		_gl.EnableVertexAttribArray(2);
-		_gl.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, stride, (void*)(sizeof(float) * 4));
 	}
 
 	public void Update(Vertex[] vertices)

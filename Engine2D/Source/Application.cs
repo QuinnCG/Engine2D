@@ -24,18 +24,21 @@ public static class Application
 		Window.OnUpdate += delta =>
 		{
 			Time.Update(Window.Time, delta);
-
 			foreach (var world in World.ActiveWorlds)
 			{
 				world.Update(delta);
 			}
 
 			OnUpdate?.Invoke(delta);
-
 			Input.ClearInputsThisFrame();
 		};
 		Window.OnRender += delta =>
 		{
+			foreach (var world in World.ActiveWorlds)
+			{
+				world.Render(delta);
+			}
+
 			OnRender?.Invoke(delta);
 			Renderer.Draw();
 		};

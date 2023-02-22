@@ -12,6 +12,8 @@ public static class Application
 	public static event Action<float>? OnUpdate;
 	public static event Action<float>? OnRender;
 
+	public static int FPS { get; private set; }
+
 	internal static GL GL { get; private set; }
 
 	private static int _lastDebugMsgID = -1;
@@ -23,23 +25,25 @@ public static class Application
 
 		Window.OnUpdate += delta =>
 		{
+			FPS = (int)(1f / delta);
+			OnUpdate?.Invoke(delta);
+
 			Time.Update(Window.Time, delta);
 			foreach (var world in World.ActiveWorlds)
 			{
 				world.Update(delta);
 			}
 
-			OnUpdate?.Invoke(delta);
 			Input.ClearInputsThisFrame();
 		};
 		Window.OnRender += delta =>
 		{
+			OnRender?.Invoke(delta);
 			foreach (var world in World.ActiveWorlds)
 			{
 				world.Render(delta);
 			}
 
-			OnRender?.Invoke(delta);
 			Renderer.Draw();
 		};
 		Window.OnClose += () => Renderer.Dispose();

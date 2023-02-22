@@ -34,7 +34,7 @@ class Player : Entity
 		_transform.Position += _speed * delta * inputDir;
 		_transform.Rotation = Time.Current * 10f;
 
-		if (Input.IsKeyDown(Key.Up))
+		if (Input.IsDown(Key.Up))
 		{
 			var entity = new Entity();
 			var transform = entity.AddComponent<Transform>();
@@ -45,7 +45,7 @@ class Player : Entity
 			_entities.Add(entity);
 			World.DefaultWorld.AddEntity(entity);
 		}
-		else if (Input.IsKeyDown(Key.Down) && _entities.Count > 0)
+		else if (Input.IsDown(Key.Down) && _entities.Count > 0)
 		{
 			World.DefaultWorld.RemoveEntity(_entities[^1]);
 			_entities.RemoveAt(_entities.Count - 1);

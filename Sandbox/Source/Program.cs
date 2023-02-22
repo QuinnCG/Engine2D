@@ -11,12 +11,12 @@ class Program
 		Application.OnLoad += OnLoad;
 		Application.OnUpdate += delta =>
 		{
-			if (Input.IsKeyDown(Key.Escape))
+			if (Input.IsDown(Key.Escape))
 			{
 				Application.Window.Close();
 			}
 
-			Console.WriteLine(1f / delta);
+			Console.WriteLine(Application.FPS);
 		};
 		Application.Start("Sandbox");
 	}

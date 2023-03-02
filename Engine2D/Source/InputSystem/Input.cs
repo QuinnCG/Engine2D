@@ -2,7 +2,7 @@
 using Engine2D.Math;
 using Silk.NET.Input;
 
-namespace Engine2D;
+namespace Engine2D.InputSystem;
 
 public static class Input
 {

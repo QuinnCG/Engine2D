@@ -5,10 +5,19 @@ namespace Engine2D;
 public abstract class Component
 {
 	public bool ReceiveUpdates { get; private set; } = true;
+	public bool ReceiveRenderUpdates { get; private set; } = true;
 
-	protected Entity Entity;
+	public Entity Entity { get { Debug.Assert(_entity != null);  return _entity; } }
 
-	internal void Begin()
+	private Entity? _entity;
+
+    public T GetComponent<T>() where T : Component
+    {
+        Debug.Assert(_entity != null);
+        return Entity.GetComponent<T>();
+    }
+
+    internal void Begin()
 	{
 		OnBegin();
 	}
@@ -23,7 +32,7 @@ public abstract class Component
 
 	internal void Render(float delta)
 	{
-		if (ReceiveUpdates)
+		if (ReceiveRenderUpdates)
 		{
 			OnRender(delta);
 		}
@@ -36,20 +45,16 @@ public abstract class Component
 
 	internal void SetEntity(Entity entity)
 	{
-		Entity = entity;
+		_entity = entity;
+		OnEntitySet();
 	}
 
-	protected T GetComponent<T>() where T : Component
-	{
-		Debug.Assert(Entity != null);
-		return Entity.GetComponent<T>();
-	}
+	protected virtual void OnEntitySet() { }
 
 	protected virtual void OnBegin() { }
 
 	protected virtual void OnUpdate(float delta) => ReceiveUpdates = false;
-	protected virtual void OnRender(float delta) { }
+	protected virtual void OnRender(float delta) => ReceiveRenderUpdates = false;
 
 	protected virtual void OnEnd() { }
-
 }

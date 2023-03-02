@@ -1,4 +1,4 @@
-﻿namespace Engine2D;
+﻿namespace Engine2D.Rendering;
 
 public struct Color
 {

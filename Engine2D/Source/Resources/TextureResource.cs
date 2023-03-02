@@ -16,7 +16,7 @@ public unsafe class TextureResource : Resource
 		fixed (byte* bytes = &data[0])
 		{
 			Stbi.SetFlipVerticallyOnLoad(true);
-			byte* import = Stbi.LoadFromMemory(bytes, data.Length, out int width, out int height, out int channels, 4);
+			byte* import = Stbi.LoadFromMemory(bytes, data.Length, out int width, out int height, out int channels, 0);
 			var pixels = new ReadOnlySpan<byte>(import, width * height * channels);
 
 			Pixels = new byte[width * height * channels];

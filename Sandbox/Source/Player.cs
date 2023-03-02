@@ -1,5 +1,6 @@
 ﻿using Engine2D;
 using Engine2D.Math;
+using Engine2D.InputSystem;
 using Engine2D.Rendering;
 using Engine2D.Resources;
 
@@ -13,17 +14,26 @@ class Player : Entity
 	private readonly List<Entity> _entities = new();
 	private readonly Random _random = new();
 
+	private float _lastFaceDir = 1f;
+
 	public Player(float speed = 3f)
 	{
-		_transform = AddComponent<Transform>();
+        _speed = speed;
+        _transform = AddComponent<Transform>();
 
-		var sprite = new Sprite(new Texture(Resource.Load<TextureResource>("Stump.png")));
-		AddComponent(new SpriteRenderer(sprite));
+		AddComponent<Animator>();
+        AddComponent<SpriteRenderer>();
+    }
 
-		_speed = speed;
-	}
+    protected override void OnBegin()
+    {
+        var texture = new Texture(Resource.Load<TextureResource>("Player.png"));
 
-	protected override void OnUpdate(float delta)
+        var animator = GetComponent<Animator>();
+		animator.Animation = new Animation(0.2f, texture, new Vector2(0.5f, 1f), new Vector2(0f, -0.25f));
+    }
+
+    protected override void OnUpdate(float delta)
 	{
 		Vector2 inputDir = new Vector2()
 		{
@@ -32,7 +42,16 @@ class Player : Entity
 		}.Normalized;
 
 		_transform.Position += _speed * delta * inputDir;
-		_transform.Rotation = Time.Current * 10f;
+		if (inputDir.X != 0f && inputDir.X != _lastFaceDir)
+		{
+			GetComponent<SpriteRenderer>().FlipX = inputDir.X < 0f;
+			_lastFaceDir = inputDir.X;
+		}
+
+		if (Input.IsHeld(Key.R))
+		{
+			_transform.Rotation += 50f * Time.Delta;
+		}
 
 		if (Input.IsDown(Key.Up))
 		{

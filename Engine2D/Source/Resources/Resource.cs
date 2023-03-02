@@ -2,7 +2,7 @@
 
 public abstract class Resource
 {
-	protected abstract void OnLoad(byte[] data);
+	protected Resource() { }
 
 	public static T Load<T>(string name) where T : Resource, new()
 	{
@@ -15,4 +15,6 @@ public abstract class Resource
 	{
 		return File.ReadAllBytes($"Resources\\{name}");
 	}
+
+    protected abstract void OnLoad(byte[] data);
 }

@@ -1,6 +1,7 @@
 ﻿using System.Text;
-using Engine2D.Rendering;
 using Silk.NET.OpenGL;
+using Engine2D.InputSystem;
+using Engine2D.Rendering;
 
 namespace Engine2D;
 
@@ -25,7 +26,6 @@ public static class Application
 
 		Window.OnUpdate += delta =>
 		{
-			FPS = (int)(1f / delta);
 			OnUpdate?.Invoke(delta);
 
 			Time.Update(Window.Time, delta);
@@ -38,7 +38,8 @@ public static class Application
 		};
 		Window.OnRender += delta =>
 		{
-			OnRender?.Invoke(delta);
+            FPS = (int)(1f / delta);
+            OnRender?.Invoke(delta);
 			foreach (var world in World.ActiveWorlds)
 			{
 				world.Render(delta);

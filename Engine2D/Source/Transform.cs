@@ -2,7 +2,7 @@
 
 namespace Engine2D;
 
-public sealed class Transform : Component
+public class Transform : Component
 {
 	public Vector2 Position
 	{
@@ -23,7 +23,7 @@ public sealed class Transform : Component
 			if (_parentTransform == null || WorldSpaceRotation)
 				return _rotation;
 			else
-				return _rotation + _parentTransform.Rotation;
+				return _rotation - _parentTransform.Rotation;
 		}
 
 		set => _rotation = value;
@@ -35,7 +35,7 @@ public sealed class Transform : Component
 			if (_parentTransform == null || WorldSpaceScale)
 				return _scale;
 			else
-				return _scale + _parentTransform.Scale;
+				return _scale * _parentTransform.Scale;
 		}
 
 		set => _scale = value;
@@ -69,14 +69,14 @@ public sealed class Transform : Component
 		WorldSpaceScale = worldSpaceScale;
 	}
 
-	protected override void OnBegin()
-	{
-		Entity.OnParentChange += entity =>
-		{
-			if (entity != null)
-				_parentTransform = entity.GetComponent<Transform>();
-			else
-				_parentTransform = null;
-		};
-	}
+    protected override void OnEntitySet()
+    {
+        Entity.OnParentChange += entity =>
+        {
+            if (entity != null)
+                _parentTransform = entity.GetComponent<Transform>();
+            else
+                _parentTransform = null;
+        };
+    }
 }
